@@ -9,8 +9,6 @@ def analizar(archivo):
 
     # Valor central
     idx_centro = (perfil['cm'] - 0).abs().idxmin()
-
-    # CORRECCIÓN: Usamos .loc para mezclar el índice de fila con el nombre string de la columna
     val_cent = perfil.loc[idx_centro, 'CU']
     x_cent = perfil.loc[idx_centro, 'cm']
 
@@ -51,7 +49,7 @@ def analizar(archivo):
     # -------------------
     # Simetría por áreas
     # -------------------
-    # Para la simetría por áreas del 80%, usamos el mismo perfil_plan (que ya está acotado al área útil)
+    # simetría por áreas del 80% 
     mitad = len(perfil_plan) // 2
 
     area_izq = np.trapz(
@@ -66,12 +64,11 @@ def analizar(archivo):
     Sarea = 100 * (abs(area_izq) - abs(area_der)) / (abs(area_izq) + abs(area_der))
 
     # -------------------
-    # Generación del Gráfico
+    # Gráfico
     # -------------------
     plt.figure(figsize=(8, 5))
     plt.plot(perfil['cm'], perfil['CU'], label='Perfil')
 
-    # CORRECCIÓN: Usamos las variables x_cent y val_cent que ya calculamos correctamente arriba
     plt.plot(x_cent, val_cent, '.', markersize=12, label=f'Central = {val_cent:.2f} CU')
     
     plt.axvline(-umbral_plan, linestyle='--', color='red', alpha=0.7)
@@ -95,7 +92,7 @@ def analizar(archivo):
     plt.savefig(img_plot, dpi=200, bbox_inches="tight")
     plt.close()
 
-    # resultados en un diccionario 
+    # resultados en un diccionario
     return {
         "planicidad": planicidad,
         "simetria_puntual_max": simetria_puntual_max,
