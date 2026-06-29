@@ -22,10 +22,10 @@ def ejecutar_analisis():
         return
 
     try:
-        # 1. Procesar el perfil con el nuevo motor
+        # 1. Procesar el perfil con analisis.py
         res = analizar(archivo)
         
-        # 2. Actualizar el cuadro de texto de la interfaz con las nuevas claves
+        # 2. Actualizar el cuadro de texto con resultados
         resultado_txt = (
             f"Archivo: {os.path.basename(archivo)}\n"
             f"Tamaño de Campo (FWHM): {res['field_size']:.2f} cm\n"
@@ -33,7 +33,6 @@ def ejecutar_analisis():
             f"Planicidad = {res['planicidad']:.3f} %   --> "
             f"{'OK' if res['planicidad'] < 2.0 else 'REVISAR'}\n\n"
             
-            # Ajustado a la nueva clave de simetría puntual máxima
             f"Simetría Puntual Máx = {res['simetria_puntual_max']:.3f} %   --> "
             f"{'OK' if abs(res['simetria_puntual_max']) < 2.0 else 'REVISAR'}\n\n"
             
@@ -44,27 +43,27 @@ def ejecutar_analisis():
         texto_resultado.delete("1.0", tk.END)
         texto_resultado.insert(tk.END, resultado_txt)
 
-# 3. Preguntar al usuario dónde y con qué nombre guardar el PDF
+# 3.  guardar el PDF
         nombre_sugerido = os.path.basename(archivo).replace(".csv", "").replace(".txt", "") + "_reporte_QA.pdf"
         
         pdf_file = filedialog.asksaveasfilename(
             title="Guardar Reporte PDF",
-            initialfile=nombre_sugerido,       # Nombre que aparece por defecto
-            defaultextension=".pdf",          # Fuerza la extensión si el usuario no la escribe
+            initialfile=nombre_sugerido,       # Nombre por defecto
+            defaultextension=".pdf",          
             filetypes=[("Archivos PDF", "*.pdf")]
         )
 
-        # Si el usuario presiona "Cancelar" en la ventana de guardar, detenemos el proceso sin romper la app
+        
         if not pdf_file:
             messagebox.showwarning("Análisis cancelado", "No se generó el reporte PDF porque no se seleccionó un destino.")
             return
 
-        # 3. Generar el reporte PDF (Pasamos la nueva métrica puntual)
+        # 3. Generar el reporte PDF 
         pdf_file = generar_pdf(
             archivo=archivo,
             field_size= res['field_size'],
             planicidad=res['planicidad'], 
-            simetria=res['simetria_puntual_max'], # Sincronizado aquí
+            simetria=res['simetria_puntual_max'], 
             Sarea=res['Sarea'], 
             img_plot=res['img_plot'], 
             notas=texto_notas,
@@ -85,7 +84,7 @@ def ejecutar_analisis():
 
 
 # -------------------
-# Configuración GUI
+#  GUI
 # -------------------
 root = tk.Tk()
 root.title("QA - Planicidad y Simetría")
