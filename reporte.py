@@ -2,7 +2,7 @@ import os
 import datetime
 from fpdf import FPDF
 
-def generar_pdf(archivo, field_size, planicidad, simetria, Sarea, img_plot, notas, ruta_salida):
+def generar_pdf(field_size, planicidad, simetria, Sarea, img_plot, notas, ruta_salida):
     pdf = FPDF()
     pdf.add_page()
 
